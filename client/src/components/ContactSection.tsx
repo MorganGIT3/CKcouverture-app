@@ -40,7 +40,7 @@ export default function ContactSection() {
             </span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Rejoignez des centaines d'agences qui utilisent déjà AgentPro pour automatiser leur prospection immobilière.
+            Rejoignez les agences qui utilisent déjà AgentPro pour automatiser leur prospection immobilière.
           </p>
         </div>
 
@@ -134,7 +134,7 @@ export default function ContactSection() {
           <div className="space-y-8">
             <Card className="hover-elevate">
               <CardContent className="p-6">
-                <h3 className="text-xl font-semibold mb-4">Essai Gratuit 15 Jours</h3>
+                <h3 className="text-xl font-semibold mb-4">Rejoignez AgentPro</h3>
                 <ul className="space-y-3 mb-6">
                   <li className="flex items-center gap-3">
                     <div className="w-2 h-2 bg-green-500 rounded-full"></div>
@@ -150,16 +150,16 @@ export default function ContactSection() {
                   </li>
                   <li className="flex items-center gap-3">
                     <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span className="text-muted-foreground">Aucun engagement</span>
+                    <span className="text-muted-foreground">Plateforme sécurisée</span>
                   </li>
                 </ul>
                 <Button 
                   className="w-full" 
                   variant="outline"
-                  onClick={() => console.log('Free trial clicked')} // todo: remove mock functionality
-                  data-testid="button-free-trial"
+                  onClick={() => console.log('Join clicked')} // todo: remove mock functionality
+                  data-testid="button-join"
                 >
-                  Commencer l'Essai Gratuit
+                  S'inscrire maintenant
                 </Button>
               </CardContent>
             </Card>

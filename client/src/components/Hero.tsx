@@ -24,7 +24,7 @@ function Hero() {
   return (
     <div className="w-full pt-16">
       <div className="container mx-auto">
-        <div className="flex gap-8 py-20 lg:py-40 items-center justify-center flex-col">
+        <div className="flex gap-8 py-12 lg:py-20 items-center justify-center flex-col">
           <div>
             <Button variant="secondary" size="sm" className="gap-4" data-testid="button-launch-article">
               Découvrez notre solution <MoveRight className="w-4 h-4" />
@@ -67,11 +67,11 @@ function Hero() {
             </p>
           </div>
           <div className="flex flex-row gap-3">
-            <Button size="lg" className="gap-4" variant="outline" data-testid="button-call">
-              Planifier un appel <PhoneCall className="w-4 h-4" />
+            <Button size="lg" className="gap-4" variant="outline" data-testid="button-login">
+              Se connecter <PhoneCall className="w-4 h-4" />
             </Button>
             <Button size="lg" className="gap-4 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700" data-testid="button-signup">
-              Commencer gratuitement <MoveRight className="w-4 h-4" />
+              S'inscrire <MoveRight className="w-4 h-4" />
             </Button>
           </div>
         </div>

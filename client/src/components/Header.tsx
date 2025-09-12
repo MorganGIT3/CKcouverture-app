@@ -25,9 +25,6 @@ export default function Header() {
             <a href="#features" className="text-muted-foreground hover:text-foreground transition-colors">
               Fonctionnalités
             </a>
-            <a href="#pricing" className="text-muted-foreground hover:text-foreground transition-colors">
-              Tarifs
-            </a>
             <a href="#contact" className="text-muted-foreground hover:text-foreground transition-colors">
               Contact
             </a>
@@ -36,10 +33,10 @@ export default function Header() {
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-4">
             <Button variant="ghost" data-testid="button-login">
-              Connexion
+              Se connecter
             </Button>
             <Button data-testid="button-signup">
-              Essai Gratuit
+              S'inscrire
             </Button>
           </div>
 
@@ -62,18 +59,15 @@ export default function Header() {
               <a href="#features" className="text-muted-foreground hover:text-foreground transition-colors">
                 Fonctionnalités
               </a>
-              <a href="#pricing" className="text-muted-foreground hover:text-foreground transition-colors">
-                Tarifs
-              </a>
               <a href="#contact" className="text-muted-foreground hover:text-foreground transition-colors">
                 Contact
               </a>
               <div className="flex flex-col gap-2 pt-2">
                 <Button variant="ghost" className="justify-start" data-testid="button-mobile-login">
-                  Connexion
+                  Se connecter
                 </Button>
                 <Button className="justify-start" data-testid="button-mobile-signup">
-                  Essai Gratuit
+                  S'inscrire
                 </Button>
               </div>
             </nav>
