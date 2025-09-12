@@ -3,10 +3,10 @@ import { Link, useLocation } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { 
-  Building2, 
+  Hammer, 
   Home, 
-  Search, 
-  Camera, 
+  FileText, 
+  Wand2, 
   BarChart3, 
   Users, 
   Settings, 
@@ -14,7 +14,10 @@ import {
   ChevronLeft,
   ChevronRight,
   Upload,
-  Target
+  Calendar,
+  Euro,
+  Camera,
+  Building
 } from 'lucide-react';
 
 export default function Sidebar() {
@@ -23,17 +26,20 @@ export default function Sidebar() {
 
   const menuItems = [
     { icon: Home, label: 'Vue d\'ensemble', path: '/dashboard', active: location === '/dashboard' },
-    { icon: Search, label: 'Opportunités', path: '/dashboard/opportunities', active: location === '/dashboard/opportunities' },
-    { icon: Camera, label: 'Photos IA', path: '/dashboard/photos', active: location === '/dashboard/photos' },
-    { icon: Building2, label: 'Mes Biens', path: '/dashboard/properties', active: location === '/dashboard/properties' },
-    { icon: Users, label: 'Leads', path: '/dashboard/leads', active: location === '/dashboard/leads' },
+    { icon: FileText, label: 'Générateur de Devis', path: '/dashboard/quotes', active: location === '/dashboard/quotes' },
+    { icon: Wand2, label: 'Visualisation IA', path: '/dashboard/ai-visualization', active: location === '/dashboard/ai-visualization' },
+    { icon: Users, label: 'Gestion Prospects', path: '/dashboard/prospects', active: location === '/dashboard/prospects' },
+    { icon: Building, label: 'Mes Chantiers', path: '/dashboard/projects', active: location === '/dashboard/projects' },
+    { icon: Calendar, label: 'Planning', path: '/dashboard/planning', active: location === '/dashboard/planning' },
+    { icon: Euro, label: 'Paiements', path: '/dashboard/payments', active: location === '/dashboard/payments' },
+    { icon: Camera, label: 'Portfolio', path: '/dashboard/portfolio', active: location === '/dashboard/portfolio' },
     { icon: BarChart3, label: 'Analytics', path: '/dashboard/analytics', active: location === '/dashboard/analytics' },
   ];
 
   const quickActions = [
-    { icon: Upload, label: 'Upload Photo', action: () => console.log('Upload photo') },
-    { icon: Target, label: 'Nouvelle Recherche', action: () => console.log('New search') },
-    { icon: Bell, label: 'Alertes', action: () => console.log('Alerts') },
+    { icon: FileText, label: 'Nouveau Devis', action: () => console.log('New quote') },
+    { icon: Wand2, label: 'Visualiser Projet', action: () => console.log('Visualize project') },
+    { icon: Building, label: 'Ajouter Chantier', action: () => console.log('Add project') },
   ];
 
   return (
@@ -46,8 +52,8 @@ export default function Sidebar() {
         <div className="flex items-center justify-between">
           {!collapsed && (
             <div className="flex items-center gap-2">
-              <Building2 className="h-6 w-6 text-primary" />
-              <span className="font-semibold text-foreground">AgentPro</span>
+              <Hammer className="h-6 w-6 text-primary" />
+              <span className="font-semibold text-foreground">ArtisanPro</span>
             </div>
           )}
           <Button
