@@ -1,17 +1,20 @@
-import Header from '@/components/Header';
-import { Hero } from '@/components/Hero';
-import FeaturesSection from '@/components/FeaturesSection';
-import ContactSection from '@/components/ContactSection';
+import { HeroSection } from "@/components/HeroSection";
+import { useLocation } from "wouter";
 
 export default function Home() {
+  const [, setLocation] = useLocation();
+
+  const handleButtonClick = () => {
+    setLocation("/login");
+  };
+
   return (
-    <div className="min-h-screen">
-      <Header />
-      <main>
-        <Hero />
-        <FeaturesSection />
-        <ContactSection />
-      </main>
-    </div>
+    <HeroSection
+      title="PLANCHAIS"
+      highlightText="Construire pour durer"
+      description="Votre application professionnelle"
+      buttonText="Se connecter"
+      onButtonClick={handleButtonClick}
+    />
   );
 }

@@ -11,8 +11,6 @@ import {
   Users, 
   Settings, 
   Bell,
-  ChevronLeft,
-  ChevronRight,
   Upload,
   Calendar,
   Euro,
@@ -44,34 +42,21 @@ export default function Sidebar() {
 
   return (
     <div className={cn(
-      "h-screen bg-gradient-to-b from-slate-50 to-white border-r border-border transition-all duration-300 flex flex-col",
+      "fixed left-0 top-0 h-screen bg-black/20 backdrop-blur-xl border-r border-white/10 transition-all duration-300 flex flex-col z-50 rounded-r-3xl",
       collapsed ? "w-16" : "w-64"
     )}>
       {/* Header */}
-      <div className="p-4 border-b border-border">
-        <div className="flex items-center justify-between">
-          {!collapsed && (
-            <div className="flex items-center gap-2">
-              <Hammer className="h-6 w-6 text-primary" />
-              <span className="font-semibold text-foreground">ArtisanPro</span>
-            </div>
-          )}
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setCollapsed(!collapsed)}
-            className="h-8 w-8 p-0"
-            data-testid="button-sidebar-toggle"
-          >
-            {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
-          </Button>
+      <div className="p-4 border-b border-white/10">
+        <div className="flex flex-col">
+          <span className="font-semibold text-white">PLANCHAIS</span>
+          <span className="text-xs text-white/70 italic">Construire pour durer</span>
         </div>
       </div>
 
       {/* Navigation */}
       <nav className="flex-1 p-4 space-y-2">
         {!collapsed && (
-          <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-4">
+          <div className="text-xs font-medium text-white/60 uppercase tracking-wide mb-4">
             Navigation
           </div>
         )}
@@ -79,11 +64,12 @@ export default function Sidebar() {
         {menuItems.map((item) => (
           <Link key={item.path} href={item.path}>
             <Button
-              variant={item.active ? "default" : "ghost"}
+              variant="ghost"
               className={cn(
-                "w-full justify-start gap-3 h-10",
+                "w-full justify-start gap-3 h-10 text-white",
                 collapsed && "justify-center",
-                item.active && "bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700"
+                item.active && "bg-white/20 backdrop-blur-md border border-white/10 text-white hover:bg-white/30",
+                !item.active && "hover:bg-white/10"
               )}
               data-testid={`nav-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
             >
@@ -95,7 +81,7 @@ export default function Sidebar() {
 
         {!collapsed && (
           <>
-            <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide mt-8 mb-4">
+            <div className="text-xs font-medium text-white/60 uppercase tracking-wide mt-8 mb-4">
               Actions Rapides
             </div>
             
@@ -104,7 +90,7 @@ export default function Sidebar() {
                 key={index}
                 variant="outline"
                 size="sm"
-                className="w-full justify-start gap-3 h-9"
+                className="w-full justify-start gap-3 h-9 text-white border-white/20 hover:bg-white/10"
                 onClick={action.action}
                 data-testid={`quick-${action.label.toLowerCase().replace(/\s+/g, '-')}`}
               >
@@ -115,23 +101,6 @@ export default function Sidebar() {
           </>
         )}
       </nav>
-
-      {/* Footer */}
-      <div className="p-4 border-t border-border">
-        <Link href="/dashboard/settings">
-          <Button
-            variant="ghost"
-            className={cn(
-              "w-full justify-start gap-3 h-10",
-              collapsed && "justify-center"
-            )}
-            data-testid="nav-settings"
-          >
-            <Settings className="h-4 w-4" />
-            {!collapsed && <span>Paramètres</span>}
-          </Button>
-        </Link>
-      </div>
     </div>
   );
 }

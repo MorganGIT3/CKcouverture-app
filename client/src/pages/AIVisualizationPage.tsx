@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import Sidebar from '@/components/Sidebar';
+import { PageWrapper } from '@/components/PageWrapper';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -84,60 +84,57 @@ export default function AIVisualizationPage() {
   };
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/30">
-      <Sidebar />
-      
-      <div className="flex-1 flex flex-col">
-        <header className="bg-white/80 backdrop-blur-sm border-b border-border px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Link href="/dashboard">
-                <Button variant="ghost" size="sm" data-testid="button-back">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Retour Dashboard
-                </Button>
-              </Link>
-              <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  Visualisation IA
-                </h1>
-                <p className="text-sm text-muted-foreground">Générez des rendus professionnels de vos projets</p>
-              </div>
-            </div>
-            
-            {/* Step indicator */}
-            <div className="flex items-center gap-2">
-              <Badge variant={step === 'upload' ? 'default' : 'secondary'}>1. Upload</Badge>
-              <Badge variant={step === 'configure' ? 'default' : 'secondary'}>2. Configuration</Badge>
-              <Badge variant={step === 'generating' ? 'default' : 'secondary'}>3. Génération</Badge>
-              <Badge variant={step === 'result' ? 'default' : 'secondary'}>4. Résultat</Badge>
+    <PageWrapper>
+      <header className="bg-black/20 backdrop-blur-xl border-b border-white/10 px-6 py-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Link href="/dashboard">
+              <Button variant="ghost" size="sm" data-testid="button-back" className="text-white hover:bg-white/10">
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Retour Dashboard
+              </Button>
+            </Link>
+            <div>
+              <h1 className="text-2xl font-bold text-white">
+                Visualisation IA
+              </h1>
+              <p className="text-sm text-white/70">Générez des rendus professionnels de vos projets</p>
             </div>
           </div>
-        </header>
+          
+          {/* Step indicator */}
+          <div className="flex items-center gap-2">
+            <Badge variant={step === 'upload' ? 'default' : 'secondary'}>1. Upload</Badge>
+            <Badge variant={step === 'configure' ? 'default' : 'secondary'}>2. Configuration</Badge>
+            <Badge variant={step === 'generating' ? 'default' : 'secondary'}>3. Génération</Badge>
+            <Badge variant={step === 'result' ? 'default' : 'secondary'}>4. Résultat</Badge>
+          </div>
+        </div>
+      </header>
 
-        <main className="flex-1 p-6">
+      <main className="flex-1 p-6">
           {/* Step 1: Upload */}
           {step === 'upload' && (
             <div className="max-w-2xl mx-auto space-y-6">
-              <Card className="hover-elevate">
+              <Card className="bg-black/20 backdrop-blur-xl border border-white/10 text-white hover-elevate">
                 <CardHeader className="text-center">
-                  <div className="w-16 h-16 mx-auto rounded-xl bg-gradient-to-r from-purple-500/20 to-pink-600/20 flex items-center justify-center mb-4">
-                    <ImageIcon className="h-8 w-8 text-purple-500" />
+                  <div className="w-16 h-16 mx-auto rounded-xl bg-black/20 backdrop-blur-md border border-white/10 flex items-center justify-center mb-4">
+                    <ImageIcon className="h-8 w-8 text-white" />
                   </div>
                   <CardTitle>Uploadez votre photo de terrain</CardTitle>
-                  <p className="text-muted-foreground">
+                  <p className="text-white/70">
                     Sélectionnez une photo claire de l'espace à aménager pour obtenir le meilleur rendu
                   </p>
                 </CardHeader>
                 <CardContent>
                   <div 
-                    className="border-2 border-dashed border-slate-300 rounded-lg p-8 text-center hover:border-blue-400 transition-colors cursor-pointer"
+                    className="border-2 border-dashed border-white/20 rounded-lg p-8 text-center hover:border-white/40 transition-colors cursor-pointer bg-black/10"
                     onClick={() => fileInputRef.current?.click()}
                     data-testid="upload-zone"
                   >
-                    <Upload className="h-12 w-12 mx-auto text-slate-400 mb-4" />
-                    <p className="text-lg font-medium mb-2">Cliquez pour sélectionner une photo</p>
-                    <p className="text-sm text-muted-foreground">
+                    <Upload className="h-12 w-12 mx-auto text-white/70 mb-4" />
+                    <p className="text-lg font-medium mb-2 text-white">Cliquez pour sélectionner une photo</p>
+                    <p className="text-sm text-white/70">
                       Formats supportés: JPG, PNG, WEBP • Max 10MB
                     </p>
                   </div>
@@ -159,7 +156,7 @@ export default function AIVisualizationPage() {
             <div className="max-w-4xl mx-auto space-y-6">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Image Preview */}
-                <Card className="hover-elevate">
+                <Card className="bg-black/20 backdrop-blur-xl border border-white/10 text-white hover-elevate">
                   <CardHeader>
                     <CardTitle>Image téléchargée</CardTitle>
                   </CardHeader>
@@ -185,7 +182,7 @@ export default function AIVisualizationPage() {
                 {/* Configuration */}
                 <div className="space-y-6">
                   {/* Project Type */}
-                  <Card className="hover-elevate">
+                  <Card className="bg-black/20 backdrop-blur-xl border border-white/10 text-white hover-elevate">
                     <CardHeader>
                       <CardTitle>Type de projet</CardTitle>
                       <p className="text-sm text-muted-foreground">Sélectionnez le type d'aménagement souhaité</p>
@@ -194,10 +191,10 @@ export default function AIVisualizationPage() {
                       {projectTypes.map((type) => (
                         <div
                           key={type.id}
-                          className={`p-3 rounded-lg border cursor-pointer transition-all ${
+                          className={`p-3 rounded-lg border cursor-pointer transition-all text-white ${
                             selectedProjectType === type.id 
-                              ? 'border-blue-500 bg-blue-50' 
-                              : 'border-slate-200 hover:border-slate-300'
+                              ? 'border-white/10 bg-black/20' 
+                              : 'border-white/20 hover:border-white/40 bg-black/10'
                           }`}
                           onClick={() => setSelectedProjectType(type.id)}
                           data-testid={`project-type-${type.id}`}
@@ -206,7 +203,7 @@ export default function AIVisualizationPage() {
                             <span className="text-2xl">{type.icon}</span>
                             <div>
                               <h4 className="font-medium">{type.name}</h4>
-                              <p className="text-sm text-muted-foreground">{type.description}</p>
+                              <p className="text-sm text-white/70">{type.description}</p>
                             </div>
                           </div>
                         </div>
@@ -216,7 +213,7 @@ export default function AIVisualizationPage() {
 
                   {/* Style */}
                   {selectedProjectType && (
-                    <Card className="hover-elevate">
+                    <Card className="bg-black/20 backdrop-blur-xl border border-white/10 text-white hover-elevate">
                       <CardHeader>
                         <CardTitle>Style de rendu</CardTitle>
                         <p className="text-sm text-muted-foreground">Choisissez l'ambiance désirée</p>
@@ -225,10 +222,10 @@ export default function AIVisualizationPage() {
                         {styles.map((style) => (
                           <div
                             key={style.id}
-                            className={`p-3 rounded-lg border cursor-pointer transition-all ${
+                            className={`p-3 rounded-lg border cursor-pointer transition-all text-white ${
                               selectedStyle === style.id 
-                                ? 'border-purple-500 bg-purple-50' 
-                                : 'border-slate-200 hover:border-slate-300'
+                                ? 'border-white/10 bg-black/20' 
+                                : 'border-white/20 hover:border-white/40 bg-black/10'
                             }`}
                             onClick={() => setSelectedStyle(style.id)}
                             data-testid={`style-${style.id}`}
@@ -261,11 +258,11 @@ export default function AIVisualizationPage() {
             <div className="max-w-2xl mx-auto space-y-6">
               <Card className="hover-elevate text-center">
                 <CardHeader>
-                  <div className="w-16 h-16 mx-auto rounded-xl bg-gradient-to-r from-blue-500/20 to-purple-600/20 flex items-center justify-center mb-4">
-                    <RefreshCw className="h-8 w-8 text-blue-500 animate-spin" />
+                  <div className="w-16 h-16 mx-auto rounded-xl bg-black/20 backdrop-blur-md border border-white/10 flex items-center justify-center mb-4">
+                    <RefreshCw className="h-8 w-8 text-white animate-spin" />
                   </div>
                   <CardTitle>Génération en cours...</CardTitle>
-                  <p className="text-muted-foreground">
+                  <p className="text-white/70">
                     Notre IA analyse votre terrain et génère le rendu professionnel
                   </p>
                 </CardHeader>
@@ -285,7 +282,7 @@ export default function AIVisualizationPage() {
           {/* Step 4: Result */}
           {step === 'result' && uploadedImage && (
             <div className="max-w-6xl mx-auto space-y-6">
-              <Card className="hover-elevate">
+              <Card className="bg-black/20 backdrop-blur-xl border border-white/10 text-white hover-elevate">
                 <CardHeader className="flex flex-row items-center justify-between">
                   <div className="flex items-center gap-3">
                     <CheckCircle className="h-6 w-6 text-green-500" />
@@ -318,9 +315,9 @@ export default function AIVisualizationPage() {
                     {/* After */}
                     <div className="space-y-3">
                       <h3 className="text-lg font-semibold">Après - Rendu IA</h3>
-                      <div className="w-full h-80 bg-gradient-to-br from-blue-100 to-purple-100 rounded-lg border flex items-center justify-center">
+                      <div className="w-full h-80 bg-black/20 backdrop-blur-xl border border-white/10 rounded-lg flex items-center justify-center">
                         <div className="text-center space-y-2">
-                          <Sparkles className="h-12 w-12 mx-auto text-purple-500" />
+                          <Sparkles className="h-12 w-12 mx-auto text-white" />
                           <p className="text-lg font-medium">Rendu IA généré</p>
                           <p className="text-sm text-muted-foreground">
                             Ici apparaîtrait le rendu professionnel<br />
@@ -328,23 +325,23 @@ export default function AIVisualizationPage() {
                           </p>
                         </div>
                       </div>
-                      <Badge className="bg-gradient-to-r from-blue-500 to-purple-600">
+                      <Badge className="bg-black/20 backdrop-blur-md border border-white/10 text-white">
                         Généré par IA
                       </Badge>
                     </div>
                   </div>
 
                   {/* Project Details */}
-                  <div className="mt-6 p-4 bg-slate-50 rounded-lg">
-                    <h4 className="font-semibold mb-2">Détails du projet</h4>
+                  <div className="mt-6 p-4 bg-black/20 backdrop-blur-md border border-white/10 rounded-lg">
+                    <h4 className="font-semibold mb-2 text-white">Détails du projet</h4>
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
-                        <span className="text-muted-foreground">Type de projet:</span>
-                        <span className="ml-2 font-medium">{projectTypes.find(p => p.id === selectedProjectType)?.name}</span>
+                        <span className="text-white/70">Type de projet:</span>
+                        <span className="ml-2 font-medium text-white">{projectTypes.find(p => p.id === selectedProjectType)?.name}</span>
                       </div>
                       <div>
-                        <span className="text-muted-foreground">Style appliqué:</span>
-                        <span className="ml-2 font-medium">{styles.find(s => s.id === selectedStyle)?.name}</span>
+                        <span className="text-white/70">Style appliqué:</span>
+                        <span className="ml-2 font-medium text-white">{styles.find(s => s.id === selectedStyle)?.name}</span>
                       </div>
                     </div>
                   </div>
@@ -362,7 +359,6 @@ export default function AIVisualizationPage() {
             className="hidden"
           />
         </main>
-      </div>
-    </div>
+    </PageWrapper>
   );
 }

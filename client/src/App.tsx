@@ -3,7 +3,9 @@ import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { GlobalBackground } from "@/components/GlobalBackground";
 import Home from "@/pages/Home";
+import LoginPage from "@/pages/LoginPage";
 import Dashboard from "@/pages/Dashboard";
 import QuotesPage from "@/pages/QuotesPage";
 import AIVisualizationPage from "@/pages/AIVisualizationPage";
@@ -19,6 +21,7 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
+      <Route path="/login" component={LoginPage} />
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/dashboard/quotes" component={QuotesPage} />
       <Route path="/dashboard/ai-visualization" component={AIVisualizationPage} />
@@ -38,6 +41,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
+        <GlobalBackground />
         <Toaster />
         <Router />
       </TooltipProvider>

@@ -1,110 +1,178 @@
-import { Button } from '@/components/ui/button';
-import DisplayCards from './DisplayCards';
-import { ArrowRight, Play } from 'lucide-react';
-import heroImage from '@assets/generated_images/Luxury_property_hero_image_594618bd.png';
+import { MeshGradient } from "@paper-design/shaders-react"
+import { useEffect, useState } from "react"
 
-export default function HeroSection() {
-  const handleGetStarted = () => {
-    console.log('Get started clicked'); // todo: remove mock functionality
-  };
 
-  const handleWatchDemo = () => {
-    console.log('Watch demo clicked'); // todo: remove mock functionality
-  };
 
-  const propertyCards = [
-    {
-      icon: <div className="w-4 h-4 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full"></div>,
-      title: "Villa Moderne",
-      description: "€850,000 • 4 chambres",
-      date: "Détectée il y a 2h",
-      titleClassName: "text-blue-400",
-    },
-    {
-      icon: <div className="w-4 h-4 bg-gradient-to-r from-purple-400 to-purple-600 rounded-full"></div>,
-      title: "Appartement Centre",
-      description: "€320,000 • 3 chambres",
-      date: "Détectée il y a 4h",
-      titleClassName: "text-purple-400",
-    },
-    {
-      icon: <div className="w-4 h-4 bg-gradient-to-r from-green-400 to-green-600 rounded-full"></div>,
-      title: "Maison Familiale",
-      description: "€450,000 • 5 chambres",
-      date: "Détectée il y a 6h",
-      titleClassName: "text-green-400",
-    },
-  ];
+interface HeroSectionProps {
+
+  title?: string
+
+  highlightText?: string
+
+  description?: string
+
+  buttonText?: string
+
+  onButtonClick?: () => void
+
+  colors?: string[]
+
+  distortion?: number
+
+  swirl?: number
+
+  speed?: number
+
+  offsetX?: number
+
+  className?: string
+
+  titleClassName?: string
+
+  descriptionClassName?: string
+
+  buttonClassName?: string
+
+  maxWidth?: string
+
+  veilOpacity?: string
+
+  fontFamily?: string
+
+  fontWeight?: number
+
+}
+
+
+
+export function HeroSection({
+
+  title = "Intelligent AI Agents for",
+
+  highlightText = "Smart Brands",
+
+  description = "Transform your brand and evolve it through AI-driven brand guidelines and always up-to-date core components.",
+
+  buttonText = "Join Waitlist",
+
+  onButtonClick,
+
+  colors = ["#72b9bb", "#b5d9d9", "#ffd1bd", "#ffebe0", "#8cc5b8", "#dbf4a4"],
+
+  distortion = 0.8,
+
+  swirl = 0.6,
+
+  speed = 0.42,
+
+  offsetX = 0.08,
+
+  className = "",
+
+  titleClassName = "",
+
+  descriptionClassName = "",
+
+  buttonClassName = "",
+
+  maxWidth = "max-w-6xl",
+
+  veilOpacity = "bg-white/20 dark:bg-black/25",
+
+  fontFamily = "Satoshi, sans-serif",
+
+  fontWeight = 500,
+
+}: HeroSectionProps) {
+  const [dimensions, setDimensions] = useState({ width: 1920, height: 1080 })
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+    const update = () =>
+      setDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      })
+    update()
+    window.addEventListener("resize", update)
+    return () => window.removeEventListener("resize", update)
+  }, [])
+
+  const handleButtonClick = () => {
+
+    if (onButtonClick) {
+
+      onButtonClick()
+
+    }
+
+  }
+
+
 
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden">
-      {/* Background Image with Overlay */}
-      <div className="absolute inset-0 z-0">
-        <img 
-          src={heroImage} 
-          alt="Luxury property" 
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/80 to-background/60"></div>
+
+    <section className={`relative w-full min-h-screen overflow-hidden bg-background flex items-center justify-center ${className}`}>
+      <div className="fixed inset-0 w-screen h-screen">
+        {mounted && (
+          <>
+            <MeshGradient
+              width={dimensions.width}
+              height={dimensions.height}
+              colors={colors}
+              distortion={distortion}
+              swirl={swirl}
+              grainMixer={0}
+              grainOverlay={0}
+              speed={speed}
+              offsetX={offsetX}
+            />
+            <div className={`absolute inset-0 pointer-events-none ${veilOpacity}`} />
+          </>
+        )}
       </div>
+      
+      <div className={`relative z-10 ${maxWidth} mx-auto px-6 w-full`}>
 
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Left Content */}
-          <div className="space-y-8">
-            <div className="space-y-4">
-              <h1 className="text-4xl md:text-6xl font-bold leading-tight">
-                <span className="text-foreground">Détectez les</span>{' '}
-                <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-blue-600 bg-clip-text text-transparent">
-                  opportunités
-                </span>{' '}
-                <span className="text-foreground">immobilières</span>
-              </h1>
-              <p className="text-xl text-muted-foreground max-w-lg">
-                Automatisez la recherche de biens, améliorez vos photos avec l'IA, 
-                et développez votre portefeuille client plus rapidement.
-              </p>
-            </div>
+        <div className="text-center">
 
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button 
-                size="lg" 
-                className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
-                onClick={handleGetStarted}
-                data-testid="button-hero-cta"
-              >
-                Commencer Gratuitement
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-              <Button 
-                variant="outline" 
-                size="lg"
-                onClick={handleWatchDemo}
-                data-testid="button-watch-demo"
-              >
-                <Play className="mr-2 h-5 w-5" />
-                Voir la Démo
-              </Button>
-            </div>
+          <h1
 
-            <div className="flex items-center gap-8 text-sm text-muted-foreground">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <span>15 jours d'essai gratuit</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                <span>Aucune carte requise</span>
-              </div>
-            </div>
-          </div>
+            className={`font-bold text-foreground text-balance text-4xl sm:text-5xl md:text-6xl xl:text-[80px] leading-tight sm:leading-tight md:leading-tight lg:leading-tight xl:leading-[1.1] mb-6 lg:text-7xl ${titleClassName}`}
 
-          {/* Right Content - DisplayCards */}
-          <div className="flex justify-center lg:justify-end">
-            <DisplayCards cards={propertyCards} />
-          </div>
+            style={{ fontFamily, fontWeight }}
+
+          >
+
+            {title} <span className="text-black italic">{highlightText}</span>
+
+          </h1>
+
+          <p className={`text-lg sm:text-xl text-white text-pretty max-w-2xl mx-auto leading-relaxed mb-10 px-4 ${descriptionClassName}`}>
+
+            {description}
+
+          </p>
+
+          <button
+
+            onClick={handleButtonClick}
+
+            className={`px-6 py-4 sm:px-8 sm:py-6 rounded-full border-4 bg-[rgba(63,63,63,1)] border-card text-sm sm:text-base text-white hover:bg-[rgba(63,63,63,0.9)] transition-colors ${buttonClassName}`}
+
+          >
+
+            {buttonText}
+
+          </button>
+
         </div>
+
       </div>
+
     </section>
-  );
+
+  )
+
 }

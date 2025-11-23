@@ -35,7 +35,7 @@ export default function ContactSection() {
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-5xl font-bold mb-4">
             <span className="text-foreground">Prêt à</span>{' '}
-            <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-blue-600 bg-clip-text text-transparent">
+            <span className="text-white">
               Commencer ?
             </span>
           </h2>
@@ -120,7 +120,7 @@ export default function ContactSection() {
 
                 <Button 
                   type="submit" 
-                  className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
+                  className="w-full bg-white/20 backdrop-blur-md border border-white/10 text-white hover:bg-white/30"
                   data-testid="button-submit-contact"
                 >
                   Demander une Démo
@@ -145,7 +145,7 @@ export default function ContactSection() {
                     <span className="text-muted-foreground">Configuration et formation incluses</span>
                   </li>
                   <li className="flex items-center gap-3">
-                    <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                    <div className="w-2 h-2 bg-white/50 rounded-full"></div>
                     <span className="text-muted-foreground">Support prioritaire 7j/7</span>
                   </li>
                   <li className="flex items-center gap-3">
@@ -169,11 +169,11 @@ export default function ContactSection() {
                 <h3 className="text-xl font-semibold mb-4">Nous Contacter</h3>
                 <div className="space-y-4">
                   <div className="flex items-center gap-3">
-                    <Mail className="h-5 w-5 text-blue-400" />
+                    <Mail className="h-5 w-5 text-white" />
                     <span className="text-muted-foreground">contact@artisanpro.fr</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <Phone className="h-5 w-5 text-purple-400" />
+                    <Phone className="h-5 w-5 text-white" />
                     <span className="text-muted-foreground">+33 1 23 45 67 89</span>
                   </div>
                   <div className="flex items-center gap-3">

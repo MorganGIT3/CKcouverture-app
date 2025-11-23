@@ -6,40 +6,40 @@ import photoEnhancementImage from '@assets/generated_images/Photo_enhancement_co
 export default function FeaturesSection() {
   const features = [
     {
-      icon: <FileText className="h-8 w-8 text-blue-400" />,
+      icon: <FileText className="h-8 w-8 text-white" />,
       title: "Générateur de Devis",
       description: "Créez des devis professionnels en quelques clics. Templates personnalisables pour piscines, paysage, menuiserie et plus.",
-      color: "from-blue-500/20 to-blue-600/20",
+      color: "bg-black/20 backdrop-blur-md border border-white/10",
     },
     {
-      icon: <Wand2 className="h-8 w-8 text-purple-400" />,
+      icon: <Wand2 className="h-8 w-8 text-white" />,
       title: "Visualisation IA",
       description: "Uploadez une photo du terrain, sélectionnez votre projet et l'IA génère un rendu professionnel pour impressionner vos clients.",
-      color: "from-purple-500/20 to-purple-600/20",
+      color: "bg-black/20 backdrop-blur-md border border-white/10",
     },
     {
-      icon: <Users className="h-8 w-8 text-green-400" />,
+      icon: <Users className="h-8 w-8 text-white" />,
       title: "Gestion des Prospects",
       description: "CRM intégré pour suivre vos leads, organiser vos rendez-vous et transformer vos prospects en clients fidèles.",
-      color: "from-green-500/20 to-green-600/20",
+      color: "bg-black/20 backdrop-blur-md border border-white/10",
     },
     {
-      icon: <Calendar className="h-8 w-8 text-orange-400" />,
+      icon: <Calendar className="h-8 w-8 text-white" />,
       title: "Planning Chantiers",
       description: "Calendrier intelligent pour planifier vos interventions, suivre l'avancement et respecter vos délais.",
-      color: "from-orange-500/20 to-orange-600/20",
+      color: "bg-black/20 backdrop-blur-md border border-white/10",
     },
     {
-      icon: <Euro className="h-8 w-8 text-indigo-400" />,
+      icon: <Euro className="h-8 w-8 text-white" />,
       title: "Suivi Paiements",
       description: "Facturation automatique, suivi des encaissements et relances clients pour optimiser votre trésorerie.",
-      color: "from-indigo-500/20 to-indigo-600/20",
+      color: "bg-black/20 backdrop-blur-md border border-white/10",
     },
     {
-      icon: <Camera className="h-8 w-8 text-pink-400" />,
+      icon: <Camera className="h-8 w-8 text-white" />,
       title: "Portfolio Avant/Après",
       description: "Showcasez vos réalisations avec des portfolios automatiques. Génération PDF pour présenter vos références.",
-      color: "from-pink-500/20 to-pink-600/20",
+      color: "bg-black/20 backdrop-blur-md border border-white/10",
     },
   ];
 
@@ -48,7 +48,7 @@ export default function FeaturesSection() {
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-5xl font-bold mb-4">
-            <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-blue-600 bg-clip-text text-transparent">
+            <span className="text-white">
               Fonctionnalités
             </span>{' '}
             <span className="text-foreground">Complètes</span>
@@ -63,7 +63,7 @@ export default function FeaturesSection() {
           {features.map((feature, index) => (
             <Card key={index} className="hover-elevate cursor-pointer group" data-testid={`card-feature-${index}`}>
               <CardContent className="p-6">
-                <div className={`w-16 h-16 rounded-xl bg-gradient-to-r ${feature.color} flex items-center justify-center mb-4 group-hover:scale-105 transition-transform`}>
+                <div className={`w-16 h-16 rounded-xl ${feature.color} flex items-center justify-center mb-4 group-hover:scale-105 transition-transform`}>
                   {feature.icon}
                 </div>
                 <h3 className="text-xl font-semibold mb-3 text-foreground">{feature.title}</h3>
@@ -89,7 +89,7 @@ export default function FeaturesSection() {
                 <span className="text-muted-foreground">Suivi en temps réel de tous vos chantiers</span>
               </li>
               <li className="flex items-center gap-3">
-                <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                <div className="w-2 h-2 bg-white/50 rounded-full"></div>
                 <span className="text-muted-foreground">Génération automatique de devis professionnels</span>
               </li>
               <li className="flex items-center gap-3">
@@ -132,7 +132,7 @@ export default function FeaturesSection() {
                 <span className="text-muted-foreground">IA spécialisée pour piscines, paysage et menuiserie</span>
               </li>
               <li className="flex items-center gap-3">
-                <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                <div className="w-2 h-2 bg-white/50 rounded-full"></div>
                 <span className="text-muted-foreground">Rendus photoréalistes pour convaincre vos clients</span>
               </li>
               <li className="flex items-center gap-3">
