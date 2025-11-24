@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useLocation } from "wouter"
 import { AnimatePresence, motion } from "framer-motion"
 import { Button } from '@/components/ui/button'
@@ -26,8 +26,15 @@ import { Link } from 'wouter'
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState<'overview' | 'quotes' | 'projects' | 'crm' | 'planning' | 'finance' | 'team'>('overview')
+  const [location, setLocation] = useLocation();
 
-  const [location] = useLocation();
+  // Vérifier si l'utilisateur est un membre d'équipe et rediriger
+  useEffect(() => {
+    const userType = localStorage.getItem('userType')
+    if (userType === 'team') {
+      setLocation('/team-dashboard')
+    }
+  }, [setLocation])
   
   return (
     <div className="flex min-h-screen relative overflow-hidden">

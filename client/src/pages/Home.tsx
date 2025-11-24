@@ -5,7 +5,7 @@ export default function Home() {
   const [, setLocation] = useLocation();
 
   const handleButtonClick = () => {
-    setLocation("/login");
+    setLocation("/auth");
   };
 
   return (

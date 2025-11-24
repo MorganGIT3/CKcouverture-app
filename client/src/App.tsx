@@ -5,9 +5,14 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { GlobalBackground } from "@/components/GlobalBackground";
 import { ChantiersProvider } from "@/context/ChantiersContext";
+import { AuthProvider } from "@/context/AuthContext";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { AnimatePresence, motion } from "framer-motion";
 import Home from "@/pages/Home";
+import AuthPage from "@/pages/AuthPage";
 import LoginPage from "@/pages/LoginPage";
+import InvitePage from "@/pages/InvitePage";
+import TeamDashboard from "@/pages/TeamDashboard";
 import Dashboard from "@/pages/Dashboard";
 import QuotesPage from "@/pages/QuotesPage";
 import AIVisualizationPage from "@/pages/AIVisualizationPage";
@@ -16,6 +21,8 @@ import ProjectsPage from "@/pages/ProjectsPage";
 import PlanningPage from "@/pages/PlanningPage";
 import EstimationPage from "@/pages/EstimationPage";
 import ClientsPage from "@/pages/ClientsPage";
+import CRMPipelinePage from "@/pages/CRMPipelinePage";
+import TeamPage from "@/pages/TeamPage";
 import NotFound from "@/pages/not-found";
 
 const pageVariants = {
@@ -48,34 +55,47 @@ function Router() {
   const [location] = useLocation();
 
   const getComponent = () => {
+    // Vérifier si c'est une route d'invitation
+    if (location.startsWith('/invite/')) {
+      return <InvitePage />;
+    }
+
     switch (location) {
       case "/":
         return <Home />;
+      case "/auth":
+        return <AuthPage />;
       case "/login":
         return <LoginPage />;
+      case "/team-dashboard":
+        return <TeamDashboard />;
       case "/dashboard":
-        return <Dashboard />;
+        return <ProtectedRoute><Dashboard /></ProtectedRoute>;
       case "/dashboard/estimation":
-        return <EstimationPage />;
+        return <ProtectedRoute><EstimationPage /></ProtectedRoute>;
       case "/dashboard/quotes":
-        return <QuotesPage />;
+        return <ProtectedRoute><QuotesPage /></ProtectedRoute>;
       case "/dashboard/ai-visualization":
-        return <AIVisualizationPage />;
+        return <ProtectedRoute><AIVisualizationPage /></ProtectedRoute>;
       case "/dashboard/prospects":
-        return <ProspectsPage />;
+        return <ProtectedRoute><ProspectsPage /></ProtectedRoute>;
       case "/dashboard/projects":
-        return <ProjectsPage />;
+        return <ProtectedRoute><ProjectsPage /></ProtectedRoute>;
       case "/dashboard/clients":
-        return <ClientsPage />;
+        return <ProtectedRoute><ClientsPage /></ProtectedRoute>;
       case "/dashboard/planning":
-        return <PlanningPage />;
+        return <ProtectedRoute><PlanningPage /></ProtectedRoute>;
+      case "/dashboard/crm":
+        return <ProtectedRoute><CRMPipelinePage /></ProtectedRoute>;
+      case "/dashboard/team":
+        return <ProtectedRoute><TeamPage /></ProtectedRoute>;
       default:
         return <NotFound />;
     }
   };
 
-  // Pages without sidebar (Home, Login) get full page animation
-  const isFullPage = location === "/" || location === "/login";
+  // Pages without sidebar (Home, Auth, Login, Invite) get full page animation
+  const isFullPage = location === "/" || location === "/auth" || location === "/login" || location.startsWith("/invite/");
 
   if (isFullPage) {
     return (
@@ -101,13 +121,15 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ChantiersProvider>
-        <TooltipProvider>
-          <GlobalBackground />
-          <Toaster />
-          <Router />
-        </TooltipProvider>
-      </ChantiersProvider>
+      <AuthProvider>
+        <ChantiersProvider>
+          <TooltipProvider>
+            <GlobalBackground />
+            <Toaster />
+            <Router />
+          </TooltipProvider>
+        </ChantiersProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
