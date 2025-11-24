@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react"
-import { useLocation } from "wouter"
 import { AnimatePresence, motion } from "framer-motion"
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -22,7 +21,7 @@ import {
   Mail,
   Settings
 } from 'lucide-react'
-import { Link } from 'wouter'
+import { Link, useLocation } from 'wouter'
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState<'overview' | 'quotes' | 'projects' | 'crm' | 'planning' | 'finance' | 'team'>('overview')
@@ -44,7 +43,7 @@ export default function Dashboard() {
       {/* Main Content - animated */}
       <AnimatePresence mode="wait">
         <motion.div
-          key={location}
+          key={`${location}-${activeTab}`}
           initial={{ opacity: 0, y: 20, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -20, scale: 0.98 }}
@@ -154,6 +153,8 @@ export default function Dashboard() {
 
 // Overview Tab Component
 function OverviewTab() {
+  const [, setLocation] = useLocation();
+  
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -217,7 +218,13 @@ function OverviewTab() {
             <CardTitle>Actions Rapides</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
-            <Button className="w-full justify-start" variant="outline">
+            <Button 
+              className="w-full justify-start" 
+              variant="outline"
+              onClick={() => {
+                setLocation('/dashboard/projects?openDialog=true')
+              }}
+            >
               <Plus className="h-4 w-4 mr-2" />
               Nouveau Chantier
             </Button>

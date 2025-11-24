@@ -6,12 +6,13 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Building, Plus, Calendar, Clock, User, Image as ImageIcon, X } from 'lucide-react';
-import { useState, useCallback } from 'react';
-import { Link } from 'wouter';
+import { useState, useCallback, useEffect } from 'react';
+import { Link, useLocation } from 'wouter';
 import { useChantiers, Chantier, Client } from '@/context/ChantiersContext';
 
 export default function ProjectsPage() {
   const { chantiers, clients, addChantier, addClient } = useChantiers();
+  const [location] = useLocation();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [newChantier, setNewChantier] = useState({
     nom: '',
@@ -82,6 +83,16 @@ export default function ProjectsPage() {
     addClient(newClient);
     setNewChantier(prev => ({ ...prev, clientId: newClient.id }));
   };
+
+  // Ouvrir la popup si le paramètre openDialog est présent dans l'URL
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('openDialog') === 'true') {
+      setIsDialogOpen(true);
+      // Nettoyer l'URL
+      window.history.replaceState({}, '', '/dashboard/projects');
+    }
+  }, [location]);
 
   return (
     <PageWrapper>

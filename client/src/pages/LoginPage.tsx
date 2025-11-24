@@ -190,31 +190,6 @@ export default function LoginPage() {
             </p>
           </div>
 
-          {/* Mode Selection */}
-          <div className="flex gap-2 mb-6">
-            <Button
-              type="button"
-              variant={loginMode === 'admin' ? 'default' : 'outline'}
-              onClick={() => setLoginMode('admin')}
-              className={`flex-1 ${loginMode === 'admin' 
-                ? 'bg-white/20 backdrop-blur-md text-white border-white/10' 
-                : 'bg-transparent text-white border-white/20 hover:bg-white/10'}`}
-            >
-              <User className="h-4 w-4 mr-2" />
-              Admin
-            </Button>
-            <Button
-              type="button"
-              variant={loginMode === 'team' ? 'default' : 'outline'}
-              onClick={() => setLoginMode('team')}
-              className={`flex-1 ${loginMode === 'team' 
-                ? 'bg-white/20 backdrop-blur-md text-white border-white/10' 
-                : 'bg-transparent text-white border-white/20 hover:bg-white/10'}`}
-            >
-              <Users className="h-4 w-4 mr-2" />
-              Membre d'équipe
-            </Button>
-          </div>
 
           {loginMode === 'team' ? (
             <div className="space-y-4">
