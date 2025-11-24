@@ -7,15 +7,14 @@ import {
   Home, 
   FileText, 
   Wand2, 
-  BarChart3, 
   Users, 
+  User,
   Settings, 
   Bell,
   Upload,
   Calendar,
-  Euro,
-  Camera,
-  Building
+  Building,
+  Calculator
 } from 'lucide-react';
 
 export default function Sidebar() {
@@ -24,14 +23,13 @@ export default function Sidebar() {
 
   const menuItems = [
     { icon: Home, label: 'Vue d\'ensemble', path: '/dashboard', active: location === '/dashboard' },
+    { icon: Calculator, label: 'Estimation automatique', path: '/dashboard/estimation', active: location === '/dashboard/estimation' },
+    { icon: Building, label: 'Mes Chantiers', path: '/dashboard/projects', active: location === '/dashboard/projects' },
     { icon: FileText, label: 'Générateur de Devis', path: '/dashboard/quotes', active: location === '/dashboard/quotes' },
     { icon: Wand2, label: 'Visualisation IA', path: '/dashboard/ai-visualization', active: location === '/dashboard/ai-visualization' },
     { icon: Users, label: 'Gestion Prospects', path: '/dashboard/prospects', active: location === '/dashboard/prospects' },
-    { icon: Building, label: 'Mes Chantiers', path: '/dashboard/projects', active: location === '/dashboard/projects' },
+    { icon: User, label: 'Clients', path: '/dashboard/clients', active: location === '/dashboard/clients' },
     { icon: Calendar, label: 'Planning', path: '/dashboard/planning', active: location === '/dashboard/planning' },
-    { icon: Euro, label: 'Paiements', path: '/dashboard/payments', active: location === '/dashboard/payments' },
-    { icon: Camera, label: 'Portfolio', path: '/dashboard/portfolio', active: location === '/dashboard/portfolio' },
-    { icon: BarChart3, label: 'Analytics', path: '/dashboard/analytics', active: location === '/dashboard/analytics' },
   ];
 
   const quickActions = [

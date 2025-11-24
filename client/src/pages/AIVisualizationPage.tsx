@@ -6,7 +6,6 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { 
   Wand2, 
-  ArrowLeft, 
   Upload, 
   Image as ImageIcon, 
   Sparkles,
@@ -14,7 +13,6 @@ import {
   RefreshCw,
   CheckCircle
 } from 'lucide-react';
-import { Link } from 'wouter';
 
 interface UploadedImage {
   file: File;
@@ -87,19 +85,11 @@ export default function AIVisualizationPage() {
     <PageWrapper>
       <header className="bg-black/20 backdrop-blur-xl border-b border-white/10 px-6 py-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link href="/dashboard">
-              <Button variant="ghost" size="sm" data-testid="button-back" className="text-white hover:bg-white/10">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Retour Dashboard
-              </Button>
-            </Link>
-            <div>
-              <h1 className="text-2xl font-bold text-white">
-                Visualisation IA
-              </h1>
-              <p className="text-sm text-white/70">Générez des rendus professionnels de vos projets</p>
-            </div>
+          <div>
+            <h1 className="text-2xl font-bold text-white">
+              Visualisation IA
+            </h1>
+            <p className="text-sm text-white/70">Générez des rendus professionnels de vos projets</p>
           </div>
           
           {/* Step indicator */}

@@ -1,4 +1,6 @@
 import { useState } from "react"
+import { useLocation } from "wouter"
+import { AnimatePresence, motion } from "framer-motion"
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -25,13 +27,23 @@ import { Link } from 'wouter'
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState<'overview' | 'quotes' | 'projects' | 'crm' | 'planning' | 'finance' | 'team'>('overview')
 
+  const [location] = useLocation();
+  
   return (
     <div className="flex min-h-screen relative overflow-hidden">
-      {/* Sidebar - now fixed */}
+      {/* Sidebar - now fixed, no animation */}
       <Sidebar />
 
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col relative z-10 ml-64 rounded-l-3xl overflow-hidden">
+      {/* Main Content - animated */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={location}
+          initial={{ opacity: 0, y: 20, scale: 0.98 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: -20, scale: 0.98 }}
+          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          className="flex-1 flex flex-col relative z-10 ml-64 rounded-l-3xl overflow-hidden"
+        >
         <header className="bg-black/20 backdrop-blur-xl border-b border-white/10 px-6 py-4 rounded-tl-3xl">
           <div className="flex items-center justify-between">
             <div>
@@ -127,7 +139,8 @@ export default function Dashboard() {
           {activeTab === 'finance' && <FinanceTab />}
           {activeTab === 'team' && <TeamTab />}
         </main>
-      </div>
+        </motion.div>
+      </AnimatePresence>
     </div>
   )
 }

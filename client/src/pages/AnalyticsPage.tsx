@@ -1,27 +1,17 @@
 import { PageWrapper } from '@/components/PageWrapper';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { BarChart3, ArrowLeft } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Link } from 'wouter';
+import { BarChart3 } from 'lucide-react';
 
 export default function AnalyticsPage() {
   return (
     <PageWrapper>
       <header className="bg-black/20 backdrop-blur-xl border-b border-white/10 px-6 py-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link href="/dashboard">
-              <Button variant="ghost" size="sm" data-testid="button-back" className="text-white hover:bg-white/10">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Retour Dashboard
-              </Button>
-            </Link>
-            <div>
-              <h1 className="text-2xl font-bold text-white">
-                Analytics Avancées
-              </h1>
-              <p className="text-sm text-white/70">Analysez vos performances et optimisez votre activité</p>
-            </div>
+          <div>
+            <h1 className="text-2xl font-bold text-white">
+              Analytics Avancées
+            </h1>
+            <p className="text-sm text-white/70">Analysez vos performances et optimisez votre activité</p>
           </div>
         </div>
       </header>

@@ -10,7 +10,6 @@ import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { 
   FileText, 
-  ArrowLeft, 
   Plus, 
   Trash2, 
   Download,
@@ -19,7 +18,6 @@ import {
   Building,
   Euro
 } from 'lucide-react';
-import { Link } from 'wouter';
 
 interface QuoteItem {
   id: string;
@@ -90,21 +88,13 @@ export default function QuotesPage() {
 
   return (
     <PageWrapper>
-      <header className="bg-black/20 backdrop-blur-xl border-b border-white/10 px-6 py-4">
+        <header className="bg-black/20 backdrop-blur-xl border-b border-white/10 px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Link href="/dashboard">
-                <Button variant="ghost" size="sm" data-testid="button-back">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Retour Dashboard
-                </Button>
-              </Link>
-              <div>
-                <h1 className="text-2xl font-bold text-white">
-                  Générateur de Devis
-                </h1>
-                <p className="text-sm text-white/70">Créez des devis professionnels en quelques clics</p>
-              </div>
+            <div>
+              <h1 className="text-2xl font-bold text-white">
+                Générateur de Devis
+              </h1>
+              <p className="text-sm text-white/70">Créez des devis professionnels en quelques clics</p>
             </div>
             <div className="flex gap-2">
               <Button variant="outline" size="sm" data-testid="button-preview">
