@@ -15,8 +15,10 @@ import {
   Calendar,
   Building,
   Calculator,
-  Workflow
+  Workflow,
+  UserCircle
 } from 'lucide-react';
+import AccountDialog from './AccountDialog';
 
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
@@ -101,6 +103,23 @@ export default function Sidebar() {
           </>
         )}
       </nav>
+
+      {/* Account Button at the bottom */}
+      <div className="p-4 border-t border-white/10 mt-auto">
+        <AccountDialog>
+          <Button
+            variant="ghost"
+            className={cn(
+              "w-full justify-start gap-3 h-10 text-white",
+              collapsed && "justify-center",
+              "hover:bg-white/10"
+            )}
+          >
+            <UserCircle className="h-4 w-4" />
+            {!collapsed && <span>Compte</span>}
+          </Button>
+        </AccountDialog>
+      </div>
     </div>
   );
 }
