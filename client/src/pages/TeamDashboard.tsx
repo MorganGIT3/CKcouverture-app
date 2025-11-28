@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import TeamSidebar from '@/components/TeamSidebar'
-import { GlobalBackground } from '@/components/GlobalBackground'
+import { AnimatedBackground } from '@/components/AnimatedBackground'
 import { 
   Building, 
   Calendar,
@@ -42,7 +42,11 @@ export default function TeamDashboard() {
 
   return (
     <>
-      <GlobalBackground />
+      {/* Animated Background */}
+      <div className="fixed inset-0 w-screen h-screen z-0" style={{ backgroundColor: "#09090b" }}>
+        <AnimatedBackground />
+      </div>
+      
       <div className="flex min-h-screen relative overflow-hidden">
         {/* Sidebar */}
         <TeamSidebar />
@@ -55,7 +59,7 @@ export default function TeamDashboard() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.98 }}
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="flex-1 flex flex-col relative z-10 ml-64 rounded-l-3xl overflow-hidden"
+            className="flex-1 flex flex-col relative z-10 overflow-hidden ml-64"
           >
             <header className="bg-black/20 backdrop-blur-xl border-b border-white/10 px-6 py-4 rounded-tl-3xl">
               <div className="flex items-center justify-between">

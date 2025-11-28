@@ -1,4 +1,5 @@
 import Sidebar from '@/components/Sidebar'
+import { AnimatedBackground } from '@/components/AnimatedBackground'
 import { useLocation } from 'wouter'
 import { AnimatePresence, motion } from 'framer-motion'
 
@@ -37,6 +38,11 @@ export function PageWrapper({ children }: PageWrapperProps) {
 
   return (
     <div className="flex min-h-screen relative overflow-hidden">
+      {/* Animated Background */}
+      <div className="fixed inset-0 w-screen h-screen z-0" style={{ backgroundColor: "#09090b" }}>
+        <AnimatedBackground />
+      </div>
+
       {/* Sidebar - now fixed, no animation */}
       <Sidebar />
 
@@ -48,7 +54,7 @@ export function PageWrapper({ children }: PageWrapperProps) {
           animate="animate"
           exit="exit"
           variants={contentVariants}
-          className="flex-1 flex flex-col relative z-10 ml-64 rounded-l-3xl overflow-hidden"
+          className="flex-1 flex flex-col relative z-10 overflow-hidden ml-64"
         >
           {children}
         </motion.div>

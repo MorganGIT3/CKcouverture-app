@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
+import { useChantiers } from '@/context/ChantiersContext';
 import { 
   FileText, 
   Plus, 
@@ -35,6 +36,9 @@ interface ClientInfo {
 }
 
 export default function QuotesPage() {
+  const { clients, chantiers, getChantierById } = useChantiers();
+  const [selectedChantierId, setSelectedChantierId] = useState<string>('');
+  const [selectedClientId, setSelectedClientId] = useState<string>('');
   const [clientInfo, setClientInfo] = useState<ClientInfo>({
     name: '',
     email: '',
@@ -81,9 +85,68 @@ export default function QuotesPage() {
   const tva = subtotal * 0.2; // 20% TVA
   const total = subtotal + tva;
 
+  const handleChantierSelect = (chantierId: string) => {
+    setSelectedChantierId(chantierId);
+    setSelectedClientId('');
+    
+    if (chantierId) {
+      const chantier = getChantierById(chantierId);
+      if (chantier) {
+        const client = clients.find(c => c.id === chantier.clientId);
+        if (client) {
+          setClientInfo({
+            name: client.name,
+            email: client.email,
+            phone: client.phone,
+            address: client.address || ''
+          });
+          setProjectType(chantier.typeProjet || '');
+          setProjectDescription(chantier.description || '');
+          
+          // Pré-remplir les lignes du devis avec les matériaux du chantier
+          if (chantier.materiaux && chantier.materiaux.length > 0) {
+            const quoteItems: QuoteItem[] = chantier.materiaux.map((mat, index) => ({
+              id: `mat-${index}`,
+              description: mat.nom,
+              quantity: parseFloat(mat.quantite) || 1,
+              unitPrice: mat.prix,
+              total: (parseFloat(mat.quantite) || 1) * mat.prix
+            }));
+            setItems(quoteItems.length > 0 ? quoteItems : [{ id: '1', description: '', quantity: 1, unitPrice: 0, total: 0 }]);
+          }
+        }
+      }
+    }
+  };
+
+  const handleClientSelect = (clientId: string) => {
+    setSelectedClientId(clientId);
+    setSelectedChantierId('');
+    
+    if (clientId) {
+      const client = clients.find(c => c.id === clientId);
+      if (client) {
+        setClientInfo({
+          name: client.name,
+          email: client.email,
+          phone: client.phone,
+          address: client.address || ''
+        });
+      }
+    }
+  };
+
   const generateQuote = () => {
     // TODO: Implement PDF generation or API call
-    console.log('Generating quote...', { clientInfo, projectType, projectDescription, items, total });
+    console.log('Generating quote...', { 
+      clientInfo, 
+      projectType, 
+      projectDescription, 
+      items, 
+      total,
+      chantierId: selectedChantierId,
+      clientId: selectedClientId
+    });
   };
 
   return (
@@ -110,6 +173,59 @@ export default function QuotesPage() {
         </header>
 
         <main className="flex-1 p-6 space-y-6">
+          {/* Sélection Chantier/Client */}
+          <Card className="bg-black/20 backdrop-blur-xl border border-white/10 text-white hover-elevate">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Building className="h-5 w-5 text-white" />
+                Sélectionner un chantier ou un client
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-white">Chantier existant</Label>
+                  <Select value={selectedChantierId || undefined} onValueChange={handleChantierSelect}>
+                    <SelectTrigger className="bg-black/20 border-white/10 text-white">
+                      <SelectValue placeholder="Sélectionner un chantier..." />
+                    </SelectTrigger>
+                    <SelectContent className="bg-black/90 border-white/20 text-white">
+                      {chantiers.map((chantier) => (
+                        <SelectItem key={chantier.id} value={chantier.id} className="text-white">
+                          {chantier.nom} - {chantier.clientName}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-white">Client existant</Label>
+                  <Select value={selectedClientId || undefined} onValueChange={handleClientSelect}>
+                    <SelectTrigger className="bg-black/20 border-white/10 text-white">
+                      <SelectValue placeholder="Sélectionner un client..." />
+                    </SelectTrigger>
+                    <SelectContent className="bg-black/90 border-white/20 text-white">
+                      {clients.map((client) => (
+                        <SelectItem key={client.id} value={client.id} className="text-white">
+                          {client.name} - {client.email}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              {(selectedChantierId || selectedClientId) && (
+                <div className="p-3 bg-black/20 border border-white/10 rounded-lg">
+                  <p className="text-sm text-white/70">
+                    {selectedChantierId 
+                      ? `Chantier sélectionné - Les informations seront pré-remplies`
+                      : `Client sélectionné - Les informations client seront pré-remplies`}
+                  </p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
           {/* Client Information */}
           <Card className="bg-black/20 backdrop-blur-xl border border-white/10 text-white hover-elevate">
             <CardHeader>

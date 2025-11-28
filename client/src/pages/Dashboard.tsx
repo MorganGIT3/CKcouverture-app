@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import Sidebar from '@/components/Sidebar'
 import { CRMPipeline } from '@/components/CRMPipeline'
+import { AnimatedBackground } from '@/components/AnimatedBackground'
 import { 
   Building, 
   FileText, 
@@ -24,8 +25,20 @@ import {
 import { Link, useLocation } from 'wouter'
 
 export default function Dashboard() {
-  const [activeTab, setActiveTab] = useState<'overview' | 'quotes' | 'projects' | 'crm' | 'planning' | 'finance' | 'team'>('overview')
   const [location, setLocation] = useLocation();
+
+  // Déterminer l'onglet actif basé sur l'URL
+  const getActiveTab = (): 'overview' | 'quotes' | 'projects' | 'crm' | 'planning' | 'finance' | 'team' => {
+    if (location === '/dashboard') return 'overview'
+    if (location === '/dashboard/quotes') return 'quotes'
+    if (location === '/dashboard/projects') return 'projects'
+    if (location === '/dashboard/crm') return 'crm'
+    if (location === '/dashboard/planning') return 'planning'
+    if (location === '/dashboard/team') return 'team'
+    return 'overview'
+  }
+
+  const activeTab = getActiveTab()
 
   // Vérifier si l'utilisateur est un membre d'équipe et rediriger
   useEffect(() => {
@@ -37,116 +50,37 @@ export default function Dashboard() {
   
   return (
     <div className="flex min-h-screen relative overflow-hidden">
+      {/* Animated Background */}
+      <div className="fixed inset-0 w-screen h-screen z-0" style={{ backgroundColor: "#09090b" }}>
+        <AnimatedBackground />
+      </div>
+      
       {/* Sidebar - now fixed, no animation */}
       <Sidebar />
 
-      {/* Main Content - animated */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={`${location}-${activeTab}`}
-          initial={{ opacity: 0, y: 20, scale: 0.98 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: -20, scale: 0.98 }}
-          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          className="flex-1 flex flex-col relative z-10 ml-64 rounded-l-3xl overflow-hidden"
-        >
-        <header className="bg-black/20 backdrop-blur-xl border-b border-white/10 px-6 py-4 rounded-tl-3xl">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-white">
-                Dashboard PLANCHAIS
-              </h1>
-              <p className="text-sm text-white/70">Construire pour durer</p>
-            </div>
-            <div className="flex items-center gap-4">
-              <Button variant="outline" size="sm" className="text-white border-white/20 hover:bg-white/10">
-                <Settings className="h-4 w-4 mr-2" />
-                Paramètres
-              </Button>
-            </div>
-          </div>
-        </header>
-
-        {/* Tabs Navigation */}
-        <div className="bg-black/20 backdrop-blur-xl border-b border-white/10 px-6 rounded-tl-3xl">
-          <div className="flex gap-2 overflow-x-auto">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setActiveTab('overview')}
-              className={activeTab === 'overview' ? 'bg-white/20 backdrop-blur-md border border-white/10 text-white hover:bg-white/30' : 'text-white hover:bg-white/10'}
-            >
-              Vue d'ensemble
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setActiveTab('quotes')}
-              className={activeTab === 'quotes' ? 'bg-white/20 backdrop-blur-md border border-white/10 text-white hover:bg-white/30' : 'text-white hover:bg-white/10'}
-            >
-              <FileText className="h-4 w-4 mr-2" />
-              Devis
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setActiveTab('projects')}
-              className={activeTab === 'projects' ? 'bg-white/20 backdrop-blur-md border border-white/10 text-white hover:bg-white/30' : 'text-white hover:bg-white/10'}
-            >
-              <Building className="h-4 w-4 mr-2" />
-              Chantiers
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setActiveTab('crm')}
-              className={activeTab === 'crm' ? 'bg-white/20 backdrop-blur-md border border-white/10 text-white hover:bg-white/30' : 'text-white hover:bg-white/10'}
-            >
-              <Users className="h-4 w-4 mr-2" />
-              CRM Pipeline
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setActiveTab('planning')}
-              className={activeTab === 'planning' ? 'bg-white/20 backdrop-blur-md border border-white/10 text-white hover:bg-white/30' : 'text-white hover:bg-white/10'}
-            >
-              <Calendar className="h-4 w-4 mr-2" />
-              Planning
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setActiveTab('finance')}
-              className={activeTab === 'finance' ? 'bg-white/20 backdrop-blur-md border border-white/10 text-white hover:bg-white/30' : 'text-white hover:bg-white/10'}
-            >
-              <Euro className="h-4 w-4 mr-2" />
-              Bilan Financier
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setActiveTab('team')}
-              className={activeTab === 'team' ? 'bg-white/20 backdrop-blur-md border border-white/10 text-white hover:bg-white/30' : 'text-white hover:bg-white/10'}
-            >
-              <Users className="h-4 w-4 mr-2" />
-              Équipe
-            </Button>
-          </div>
-        </div>
-
-        {/* Tab Content */}
+      {/* Main Content - not animated */}
+      <div className="flex-1 flex flex-col relative z-10 overflow-hidden ml-64">
+        {/* Tab Content - only this part is animated */}
         <main className="flex-1 p-6 space-y-6 overflow-auto">
-          {activeTab === 'overview' && <OverviewTab />}
-          {activeTab === 'quotes' && <QuotesTab />}
-          {activeTab === 'projects' && <ProjectsTab />}
-          {activeTab === 'crm' && <CRMTab />}
-          {activeTab === 'planning' && <PlanningTab />}
-          {activeTab === 'finance' && <FinanceTab />}
-          {activeTab === 'team' && <TeamTab />}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, y: 20, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -20, scale: 0.98 }}
+              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            >
+              {activeTab === 'overview' && <OverviewTab />}
+              {activeTab === 'quotes' && <QuotesTab />}
+              {activeTab === 'projects' && <ProjectsTab />}
+              {activeTab === 'crm' && <CRMTab />}
+              {activeTab === 'planning' && <PlanningTab />}
+              {activeTab === 'finance' && <FinanceTab />}
+              {activeTab === 'team' && <TeamTab />}
+            </motion.div>
+          </AnimatePresence>
         </main>
-        </motion.div>
-      </AnimatePresence>
+      </div>
     </div>
   )
 }

@@ -1,6 +1,6 @@
-# PLANCHAIS App
+# CK-Couverture App
 
-Application professionnelle pour la gestion de chantiers et devis avec design glassmorphism et fond MeshGradient animé.
+Application professionnelle pour la gestion de chantiers et devis avec design moderne et fond NeonOrbs animé.
 
 ## 🚀 Déploiement sur Vercel
 
@@ -14,7 +14,7 @@ Application professionnelle pour la gestion de chantiers et devis avec design gl
 1. **Connecter le dépôt GitHub à Vercel**
    - Allez sur [vercel.com](https://vercel.com)
    - Cliquez sur "New Project"
-   - Importez le dépôt `MorganGIT3/PLANCHAIS-app`
+   - Importez le dépôt `MorganGIT3/CKcouverture-app`
 
 2. **Configuration automatique**
    - Vercel détectera automatiquement la configuration depuis `vercel.json`
@@ -54,13 +54,13 @@ npm start
 - Express
 - Tailwind CSS
 - Framer Motion
-- @paper-design/shaders-react (MeshGradient)
+- Framer Motion (animations)
 - Wouter (routing)
 
 ## 🎨 Fonctionnalités
 
-- Design glassmorphism avec transparence
-- Fond MeshGradient animé
+- Design moderne avec effets néon
+- Fond NeonOrbs animé
 - Dashboard complet avec gestion de devis
 - CRM Pipeline avec drag & drop
 - Visualisation IA

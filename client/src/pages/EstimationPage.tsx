@@ -1,7 +1,13 @@
 import { PageWrapper } from '@/components/PageWrapper';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Upload, Wand2, Plus, Calculator, User, ArrowRight, ArrowLeft, CheckCircle2 } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useChantiers, Client, Estimation } from '@/context/ChantiersContext';
+import { HistoriqueEstimations } from '@/components/HistoriqueEstimations';
+import { Upload, Wand2, Plus, Calculator, User, ArrowRight, ArrowLeft, CheckCircle2, History } from 'lucide-react';
 import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -10,19 +16,15 @@ interface UploadedImage {
   preview: string;
 }
 
-interface Client {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-}
-
 export default function EstimationPage() {
+  const { clients, addClient, addEstimation } = useChantiers();
+  const [activeTab, setActiveTab] = useState<'estimation' | 'historique'>('estimation');
   const [step, setStep] = useState(1);
   const [images, setImages] = useState<UploadedImage[]>([]);
   const [isDragging, setIsDragging] = useState(false);
-  const [selectedClient, setSelectedClient] = useState<Client | null>(null);
-  const [newClient, setNewClient] = useState({ name: '', email: '', phone: '' });
+  const [selectedClientId, setSelectedClientId] = useState<string>('');
+  const [isNewClientDialogOpen, setIsNewClientDialogOpen] = useState(false);
+  const [newClient, setNewClient] = useState({ name: '', email: '', phone: '', address: '' });
   const [chantierInfo, setChantierInfo] = useState({
     surface: '',
     materiaux: '',
@@ -31,6 +33,8 @@ export default function EstimationPage() {
     metier: ''
   });
   const [analysisResults, setAnalysisResults] = useState<any>(null);
+
+  const selectedClient = clients.find(c => c.id === selectedClientId);
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -82,7 +86,7 @@ export default function EstimationPage() {
   const handleLaunchAnalysis = () => {
     // TODO: Implement AI analysis API call
     // Simulate analysis results
-    setAnalysisResults({
+    const results = {
       tempsRealisation: '3 semaines',
       materiaux: [
         { nom: 'Carrelage', quantite: '50m²', prix: 800 },
@@ -104,17 +108,56 @@ export default function EstimationPage() {
         'Outil spécifique nécessaire : coupe-carrelage électrique',
         'Vérifier l\'état des murs avant pose du carrelage'
       ]
-    });
+    };
+    setAnalysisResults(results);
     setStep(3);
+
+    // Sauvegarder l'estimation dans l'historique
+    if (selectedClientId && selectedClient) {
+      const estimation: Estimation = {
+        id: Date.now().toString(),
+        clientId: selectedClientId,
+        clientName: selectedClient.name,
+        date: new Date().toISOString(),
+        chantierInfo: { ...chantierInfo },
+        images: images.map(img => img.preview),
+        analysisResults: results
+      };
+      addEstimation(estimation);
+    }
+  };
+
+  const handleClientSelect = (clientId: string) => {
+    setSelectedClientId(clientId);
   };
 
   const handleCreateClient = () => {
+    if (!newClient.name || !newClient.email || !newClient.phone) return;
+    
     const client: Client = {
       id: Date.now().toString(),
-      ...newClient
+      name: newClient.name,
+      email: newClient.email,
+      phone: newClient.phone,
+      address: newClient.address || undefined,
     };
-    setSelectedClient(client);
-    setNewClient({ name: '', email: '', phone: '' });
+    
+    addClient(client);
+    setSelectedClientId(client.id);
+    setNewClient({ name: '', email: '', phone: '', address: '' });
+    setIsNewClientDialogOpen(false);
+  };
+
+  const handleReuseEstimation = (estimation: Estimation) => {
+    setSelectedClientId(estimation.clientId);
+    setChantierInfo({ ...estimation.chantierInfo });
+    setAnalysisResults(estimation.analysisResults);
+    setImages(estimation.images.map((preview, index) => ({
+      file: new File([], `image-${index}.jpg`),
+      preview
+    })));
+    setStep(3);
+    setActiveTab('estimation');
   };
 
   return (
@@ -126,13 +169,38 @@ export default function EstimationPage() {
               Estimation Automatique des Chantiers
             </h1>
             <p className="text-sm text-white/70">
-              Étape {step}/3 - {step === 1 ? 'Import des photos' : step === 2 ? 'Informations du chantier' : 'Résultats de l\'analyse'}
+              {activeTab === 'estimation' 
+                ? `Étape ${step}/3 - ${step === 1 ? 'Import des photos' : step === 2 ? 'Informations du chantier' : 'Résultats de l\'analyse'}`
+                : 'Historique des estimations'}
             </p>
+          </div>
+          <div className="flex gap-2">
+            <Button
+              variant={activeTab === 'estimation' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setActiveTab('estimation')}
+              className={activeTab === 'estimation' ? 'bg-white/20 text-white' : 'bg-transparent border-white/20 text-white hover:bg-white/10'}
+            >
+              <Calculator className="h-4 w-4 mr-2" />
+              Estimation
+            </Button>
+            <Button
+              variant={activeTab === 'historique' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setActiveTab('historique')}
+              className={activeTab === 'historique' ? 'bg-white/20 text-white' : 'bg-transparent border-white/20 text-white hover:bg-white/10'}
+            >
+              <History className="h-4 w-4 mr-2" />
+              Historique
+            </Button>
           </div>
         </div>
       </header>
 
       <main className="flex-1 p-6">
+        {activeTab === 'historique' ? (
+          <HistoriqueEstimations onReuseEstimation={handleReuseEstimation} />
+        ) : (
         <AnimatePresence mode="wait">
           {step === 1 && (
             <motion.div
@@ -243,57 +311,93 @@ export default function EstimationPage() {
                         <p className="text-white font-medium">{selectedClient.name}</p>
                         <p className="text-sm text-white/70">{selectedClient.email}</p>
                         <p className="text-sm text-white/70">{selectedClient.phone}</p>
+                        {selectedClient.address && (
+                          <p className="text-sm text-white/70 mt-1">📍 {selectedClient.address}</p>
+                        )}
                         <Button
                           variant="outline"
                           size="sm"
                           className="mt-2 text-white border-white/20 hover:bg-white/10"
-                          onClick={() => setSelectedClient(null)}
+                          onClick={() => setSelectedClientId('')}
                         >
                           Changer de client
                         </Button>
                       </div>
                     ) : (
                       <div className="space-y-4 p-4 bg-black/20 backdrop-blur-md border border-white/10 rounded-lg">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                          <div>
-                            <label className="text-sm font-medium text-white block mb-2">Nom</label>
-                            <input
-                              type="text"
-                              value={newClient.name}
-                              onChange={(e) => setNewClient({ ...newClient, name: e.target.value })}
-                              className="w-full px-3 py-2 rounded-md border bg-black/20 backdrop-blur-md border-white/10 text-white placeholder:text-white/50"
-                              placeholder="Nom du client"
-                            />
-                          </div>
-                          <div>
-                            <label className="text-sm font-medium text-white block mb-2">Email</label>
-                            <input
-                              type="email"
-                              value={newClient.email}
-                              onChange={(e) => setNewClient({ ...newClient, email: e.target.value })}
-                              className="w-full px-3 py-2 rounded-md border bg-black/20 backdrop-blur-md border-white/10 text-white placeholder:text-white/50"
-                              placeholder="email@example.com"
-                            />
-                          </div>
-                          <div>
-                            <label className="text-sm font-medium text-white block mb-2">Téléphone</label>
-                            <input
-                              type="tel"
-                              value={newClient.phone}
-                              onChange={(e) => setNewClient({ ...newClient, phone: e.target.value })}
-                              className="w-full px-3 py-2 rounded-md border bg-black/20 backdrop-blur-md border-white/10 text-white placeholder:text-white/50"
-                              placeholder="06 12 34 56 78"
-                            />
-                          </div>
+                        <div className="flex gap-2">
+                          <Select value={selectedClientId || undefined} onValueChange={handleClientSelect} className="flex-1">
+                            <SelectTrigger className="bg-black/20 border-white/10 text-white">
+                              <SelectValue placeholder="Sélectionner un client..." />
+                            </SelectTrigger>
+                            <SelectContent className="bg-black/90 border-white/20 text-white">
+                              {clients.map((client) => (
+                                <SelectItem key={client.id} value={client.id} className="text-white">
+                                  {client.name} - {client.email}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <Dialog open={isNewClientDialogOpen} onOpenChange={setIsNewClientDialogOpen}>
+                            <DialogTrigger asChild>
+                              <Button variant="outline" className="bg-black/20 border-white/10 text-white hover:bg-white/10">
+                                <Plus className="h-4 w-4" />
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent className="bg-black/20 backdrop-blur-xl border border-white/10 text-white">
+                              <DialogHeader>
+                                <DialogTitle className="text-white">Nouveau Client</DialogTitle>
+                              </DialogHeader>
+                              <div className="space-y-4">
+                                <div>
+                                  <Label className="text-white">Nom</Label>
+                                  <Input
+                                    value={newClient.name}
+                                    onChange={(e) => setNewClient({ ...newClient, name: e.target.value })}
+                                    placeholder="Nom du client"
+                                    className="bg-black/20 border-white/10 text-white"
+                                  />
+                                </div>
+                                <div>
+                                  <Label className="text-white">Email</Label>
+                                  <Input
+                                    type="email"
+                                    value={newClient.email}
+                                    onChange={(e) => setNewClient({ ...newClient, email: e.target.value })}
+                                    placeholder="email@example.com"
+                                    className="bg-black/20 border-white/10 text-white"
+                                  />
+                                </div>
+                                <div>
+                                  <Label className="text-white">Téléphone</Label>
+                                  <Input
+                                    type="tel"
+                                    value={newClient.phone}
+                                    onChange={(e) => setNewClient({ ...newClient, phone: e.target.value })}
+                                    placeholder="06 12 34 56 78"
+                                    className="bg-black/20 border-white/10 text-white"
+                                  />
+                                </div>
+                                <div>
+                                  <Label className="text-white">Adresse</Label>
+                                  <Input
+                                    value={newClient.address}
+                                    onChange={(e) => setNewClient({ ...newClient, address: e.target.value })}
+                                    placeholder="Adresse complète"
+                                    className="bg-black/20 border-white/10 text-white"
+                                  />
+                                </div>
+                                <Button
+                                  onClick={handleCreateClient}
+                                  disabled={!newClient.name || !newClient.email || !newClient.phone}
+                                  className="w-full bg-white/20 hover:bg-white/30 text-white"
+                                >
+                                  Créer le client
+                                </Button>
+                              </div>
+                            </DialogContent>
+                          </Dialog>
                         </div>
-                        <Button
-                          onClick={handleCreateClient}
-                          disabled={!newClient.name || !newClient.email || !newClient.phone}
-                          className="bg-white/20 backdrop-blur-md text-white border border-white/10 hover:bg-white/30 disabled:opacity-50"
-                        >
-                          <Plus className="h-4 w-4 mr-2" />
-                          Ajouter le client
-                        </Button>
                       </div>
                     )}
                   </div>
@@ -372,7 +476,7 @@ export default function EstimationPage() {
                     </Button>
                     <Button
                       onClick={handleLaunchAnalysis}
-                      disabled={!selectedClient || !chantierInfo.surface || !chantierInfo.metier}
+                      disabled={!selectedClientId || !chantierInfo.surface || !chantierInfo.metier}
                       className="bg-white/20 backdrop-blur-md text-white border border-white/10 hover:bg-white/30 disabled:opacity-50"
                     >
                       <Wand2 className="h-4 w-4 mr-2" />
@@ -504,7 +608,7 @@ export default function EstimationPage() {
                       onClick={() => {
                         setStep(1);
                         setImages([]);
-                        setSelectedClient(null);
+                        setSelectedClientId('');
                         setChantierInfo({ surface: '', materiaux: '', localisation: '', delai: '', metier: '' });
                         setAnalysisResults(null);
                       }}
@@ -518,6 +622,7 @@ export default function EstimationPage() {
             </motion.div>
           )}
         </AnimatePresence>
+        )}
       </main>
     </PageWrapper>
   );

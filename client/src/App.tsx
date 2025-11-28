@@ -9,8 +9,6 @@ import { AuthProvider } from "@/context/AuthContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { AnimatePresence, motion } from "framer-motion";
 import Home from "@/pages/Home";
-import AuthPage from "@/pages/AuthPage";
-import LoginPage from "@/pages/LoginPage";
 import InvitePage from "@/pages/InvitePage";
 import TeamDashboard from "@/pages/TeamDashboard";
 import Dashboard from "@/pages/Dashboard";
@@ -63,10 +61,6 @@ function Router() {
     switch (location) {
       case "/":
         return <Home />;
-      case "/auth":
-        return <AuthPage />;
-      case "/login":
-        return <LoginPage />;
       case "/team-dashboard":
         return <TeamDashboard />;
       case "/dashboard":
@@ -94,8 +88,8 @@ function Router() {
     }
   };
 
-  // Pages without sidebar (Home, Auth, Login, Invite) get full page animation
-  const isFullPage = location === "/" || location === "/auth" || location === "/login" || location.startsWith("/invite/");
+  // Pages without sidebar (Home, Invite) get full page animation
+  const isFullPage = location === "/" || location.startsWith("/invite/");
 
   if (isFullPage) {
     return (

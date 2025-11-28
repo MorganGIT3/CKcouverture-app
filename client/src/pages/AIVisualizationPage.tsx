@@ -4,6 +4,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useChantiers, Client } from '@/context/ChantiersContext';
 import { 
   Wand2, 
   Upload, 
@@ -11,7 +16,9 @@ import {
   Sparkles,
   Download,
   RefreshCw,
-  CheckCircle
+  CheckCircle,
+  User,
+  Plus
 } from 'lucide-react';
 
 interface UploadedImage {
@@ -20,12 +27,18 @@ interface UploadedImage {
 }
 
 export default function AIVisualizationPage() {
+  const { clients, addClient } = useChantiers();
   const [step, setStep] = useState<'upload' | 'configure' | 'generating' | 'result'>('upload');
   const [uploadedImage, setUploadedImage] = useState<UploadedImage | null>(null);
   const [selectedProjectType, setSelectedProjectType] = useState('');
   const [selectedStyle, setSelectedStyle] = useState('');
+  const [selectedClientId, setSelectedClientId] = useState<string>('');
+  const [isNewClientDialogOpen, setIsNewClientDialogOpen] = useState(false);
+  const [newClient, setNewClient] = useState({ name: '', email: '', phone: '', address: '', preferences: '' });
   const [progress, setProgress] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const selectedClient = clients.find(c => c.id === selectedClientId);
 
   const projectTypes = [
     { id: 'piscine', name: 'Piscine & Spa', icon: '🏊‍♂️', description: 'Piscines creusées, hors-sol, spas' },
@@ -56,6 +69,41 @@ export default function AIVisualizationPage() {
     }
   };
 
+  const handleClientSelect = (clientId: string) => {
+    setSelectedClientId(clientId);
+    if (clientId) {
+      const client = clients.find(c => c.id === clientId);
+      if (client?.preferences) {
+        // Pré-remplir le style avec les préférences du client
+        const matchingStyle = styles.find(s => s.id === client.preferences);
+        if (matchingStyle) {
+          setSelectedStyle(client.preferences);
+        }
+      }
+    }
+  };
+
+  const handleCreateClient = () => {
+    if (!newClient.name || !newClient.email || !newClient.phone) return;
+    
+    const client: Client = {
+      id: Date.now().toString(),
+      name: newClient.name,
+      email: newClient.email,
+      phone: newClient.phone,
+      address: newClient.address || undefined,
+      preferences: newClient.preferences || undefined,
+    };
+    
+    addClient(client);
+    setSelectedClientId(client.id);
+    if (client.preferences) {
+      setSelectedStyle(client.preferences);
+    }
+    setNewClient({ name: '', email: '', phone: '', address: '', preferences: '' });
+    setIsNewClientDialogOpen(false);
+  };
+
   const generateVisualization = () => {
     setStep('generating');
     setProgress(0);
@@ -78,6 +126,7 @@ export default function AIVisualizationPage() {
     setUploadedImage(null);
     setSelectedProjectType('');
     setSelectedStyle('');
+    setSelectedClientId('');
     setProgress(0);
   };
 
@@ -171,6 +220,121 @@ export default function AIVisualizationPage() {
 
                 {/* Configuration */}
                 <div className="space-y-6">
+                  {/* Client Selection */}
+                  <Card className="bg-black/20 backdrop-blur-xl border border-white/10 text-white hover-elevate">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <User className="h-5 w-5" />
+                        Client (optionnel)
+                      </CardTitle>
+                      <p className="text-sm text-muted-foreground">Sélectionnez un client pour pré-remplir les informations</p>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="flex gap-2">
+                        <Select value={selectedClientId || undefined} onValueChange={handleClientSelect}>
+                          <SelectTrigger className="bg-black/20 border-white/10 text-white flex-1">
+                            <SelectValue placeholder="Sélectionner un client..." />
+                          </SelectTrigger>
+                          <SelectContent className="bg-black/90 border-white/20 text-white">
+                            {clients.map((client) => (
+                              <SelectItem key={client.id} value={client.id} className="text-white">
+                                {client.name} - {client.email}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <Dialog open={isNewClientDialogOpen} onOpenChange={setIsNewClientDialogOpen}>
+                          <DialogTrigger asChild>
+                            <Button variant="outline" className="bg-black/20 border-white/10 text-white hover:bg-white/10">
+                              <Plus className="h-4 w-4" />
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="bg-black/20 backdrop-blur-xl border border-white/10 text-white">
+                            <DialogHeader>
+                              <DialogTitle className="text-white">Nouveau Client</DialogTitle>
+                            </DialogHeader>
+                            <div className="space-y-4">
+                              <div>
+                                <Label className="text-white">Nom</Label>
+                                <Input
+                                  value={newClient.name}
+                                  onChange={(e) => setNewClient({ ...newClient, name: e.target.value })}
+                                  placeholder="Nom du client"
+                                  className="bg-black/20 border-white/10 text-white"
+                                />
+                              </div>
+                              <div>
+                                <Label className="text-white">Email</Label>
+                                <Input
+                                  type="email"
+                                  value={newClient.email}
+                                  onChange={(e) => setNewClient({ ...newClient, email: e.target.value })}
+                                  placeholder="email@example.com"
+                                  className="bg-black/20 border-white/10 text-white"
+                                />
+                              </div>
+                              <div>
+                                <Label className="text-white">Téléphone</Label>
+                                <Input
+                                  type="tel"
+                                  value={newClient.phone}
+                                  onChange={(e) => setNewClient({ ...newClient, phone: e.target.value })}
+                                  placeholder="06 12 34 56 78"
+                                  className="bg-black/20 border-white/10 text-white"
+                                />
+                              </div>
+                              <div>
+                                <Label className="text-white">Adresse</Label>
+                                <Input
+                                  value={newClient.address}
+                                  onChange={(e) => setNewClient({ ...newClient, address: e.target.value })}
+                                  placeholder="Adresse complète"
+                                  className="bg-black/20 border-white/10 text-white"
+                                />
+                              </div>
+                              <div>
+                                <Label className="text-white">Style préféré</Label>
+                                <Select value={newClient.preferences} onValueChange={(value) => setNewClient({ ...newClient, preferences: value })}>
+                                  <SelectTrigger className="bg-black/20 border-white/10 text-white">
+                                    <SelectValue placeholder="Sélectionner un style" />
+                                  </SelectTrigger>
+                                  <SelectContent className="bg-black/90 border-white/20 text-white">
+                                    {styles.map((style) => (
+                                      <SelectItem key={style.id} value={style.id} className="text-white">
+                                        {style.name}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                              <Button
+                                onClick={handleCreateClient}
+                                disabled={!newClient.name || !newClient.email || !newClient.phone}
+                                className="w-full bg-white/20 hover:bg-white/30 text-white"
+                              >
+                                Créer le client
+                              </Button>
+                            </div>
+                          </DialogContent>
+                        </Dialog>
+                      </div>
+                      {selectedClient && (
+                        <div className="p-3 bg-black/20 border border-white/10 rounded-lg">
+                          <p className="text-sm font-medium text-white">{selectedClient.name}</p>
+                          <p className="text-xs text-white/70">{selectedClient.email}</p>
+                          {selectedClient.address && (
+                            <p className="text-xs text-white/70 mt-1">📍 {selectedClient.address}</p>
+                          )}
+                          {selectedClient.preferences && (
+                            <p className="text-xs text-white/70 mt-1">
+                              Style préféré: {styles.find(s => s.id === selectedClient.preferences)?.name}
+                            </p>
+                          )}
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+
                   {/* Project Type */}
                   <Card className="bg-black/20 backdrop-blur-xl border border-white/10 text-white hover-elevate">
                     <CardHeader>
